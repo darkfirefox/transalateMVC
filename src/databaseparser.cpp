@@ -16,3 +16,13 @@ ElementHistory DatabaseParser::fromRecord(const QSqlRecord &rec)
     return element;
 }
 
+ElementHistory DatabaseParser::fromStrings(QString langFrom, QString langTo, QString textFrom, QString textTo)
+{
+    ElementHistory element;
+    element.setLangF(langFrom);
+    element.setLangT(langTo);
+    element.setTextF(textFrom);
+    element.setTextT(textTo);
+    return element;
+}
+

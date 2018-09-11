@@ -25,7 +25,7 @@ public:
     Q_INVOKABLE void clearAll();
 private:
     ListElementhistory backing;
-    ServiceHistory serviceHistory;
+    ServiceHistory* serviceHistory;
 };
 
 #endif // HISTORYMODEL_H

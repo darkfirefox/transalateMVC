@@ -1,4 +1,7 @@
 #include "servicehistory.h"
+ServiceHistory* ServiceHistory::service=0;
+ServiceHistoryDestroyer ServiceHistory::destroyer;
+
 
 ServiceHistory::ServiceHistory()
 {
@@ -15,35 +18,36 @@ void ServiceHistory::deleteRow(int id)
     db.deleteRow(id);
 }
 
-void ServiceHistory::insertRow(ElementHistory element)
+void ServiceHistory::insertRow(QString langFrom,QString langTo,QString textFrom,QString textTo)
 {
-    db.insertRow(element);
+    db.insertRow(parser.fromStrings(langFrom,langTo,textFrom,textTo));
 }
 
 ListElementhistory ServiceHistory::readAll()
 {
     ListRecords recs = db.readAll();
     ListElementhistory list;
-    for(int i=0;i<list.size();i++){
+    for(int i=0;i<recs.size();i++){
         list.add(parser.fromRecord(recs.getAt(i)));
     }
-    ElementHistory el1;
-    el1.setId(0);
-    el1.setLangF("en");
-    el1.setLangT("ru");
-    el1.setTextF("hi");
-    el1.setTextT("привет");
-    ElementHistory el2;
-    el1.setId(1);
-    el2.setLangF("en");
-    el2.setLangT("ru");
-    el2.setTextF("home");
-    el2.setTextT("дом");
-
-    list.add(el1);
-    list.add(el1);
-    list.add(el2);
-    list.add(el2);
-    list.add(el1);
     return list;
+}
+
+ServiceHistory &ServiceHistory::Instance()
+{
+    if(!service){
+        service=new ServiceHistory();
+        destroyer.init(service);
+    }
+    return *service;
+}
+
+ServiceHistoryDestroyer::~ServiceHistoryDestroyer()
+{
+    delete instance;
+}
+
+void ServiceHistoryDestroyer::init(ServiceHistory *service)
+{
+    instance=service;
 }

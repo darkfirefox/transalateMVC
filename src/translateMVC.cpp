@@ -4,6 +4,7 @@
 
 #include <sailfishapp.h>
 #include "historymodel.h"
+#include "translatemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,12 @@ int main(int argc, char *argv[])
     //
     // To display the view, call "show()" (will show fullscreen on device).
 
+    QGuiApplication * application = SailfishApp::application(argc,argv);
+    QQuickView * view = SailfishApp :: createView();
     qmlRegisterType<HistoryModel>("MyHistory", 1, 0, "HistoryModel");
-    return SailfishApp::main(argc, argv);
+    qmlRegisterType<TranslateModel>("MyTranslate", 1, 0, "TransalteModel");
+    view->setSource (SailfishApp::pathTo( "qml/translateMVC.qml"));
+    view->show();
+    return application->exec();
+    //return SailfishApp::main(argc, argv);
 }

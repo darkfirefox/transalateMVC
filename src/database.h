@@ -6,6 +6,10 @@
 #include "elementhistory.h"
 #include "listrecords.h"
 #include <QFile>
+#include <QDebug>
+#include <QStandardPaths>
+#include <QDir>
+#include <QSqlError>
 class Database
 {
 public:
@@ -19,6 +23,7 @@ public:
 
 private:
     QSqlDatabase db;
+    QString name ;
     QSqlQuery query;
     QString path;
 };

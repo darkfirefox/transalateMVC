@@ -5,19 +5,38 @@
 #include "listelementhistory.h"
 #include "listrecords.h"
 #include "databaseparser.h"
+
+class ServiceHistory;
+class ServiceHistoryDestroyer
+{
+public:
+    ~ServiceHistoryDestroyer();
+    void init(ServiceHistory* service);
+private:
+    ServiceHistory* instance;
+};
+
 class ServiceHistory
 {
 public:
-    ServiceHistory();
-
     void deleteAll();
     void deleteRow(int id);
-    void insertRow(ElementHistory element);
+    void insertRow(QString langFrom,QString langTo,QString textFrom,QString textTo);
     ListElementhistory readAll();
 
+    static ServiceHistory& Instance();
 private:
     Database db;
     DatabaseParser parser;
+
+    static ServiceHistory* service;
+    static ServiceHistoryDestroyer destroyer;
+protected:
+    ServiceHistory();
+    friend class ServiceHistoryDestroyer;
+    ServiceHistory(const ServiceHistory&);
+    ServiceHistory& operator= (ServiceHistory&);
+    ~ServiceHistory(){}
 };
 
 #endif // SERVICEHISTORY_H

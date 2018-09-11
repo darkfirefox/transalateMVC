@@ -2,17 +2,18 @@
 
 Database::Database()
 {
-    db=QSqlDatabase::addDatabase("QSQLITE");
-    path="/usr/share/translate/data/HistoryDB.sqlite";
+    name="HistoryDB";
 }
 
 void Database::init()
 {
-    if(!db.isOpen()){
-        db.setDatabaseName(path);
-        db.open();
-        query.exec("CREATE TABLE IF NOT EXISTS historyTranslate (fromL text,fromT text,toL text, toT text)");
-    }
+    path=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir dir(path);
+    db=QSqlDatabase::addDatabase("QSQLITE",name);
+    const QString dbFileName(QLatin1String("HistoryDB.sqlite"));
+    db.setDatabaseName(dir.absoluteFilePath(dbFileName));
+    query=QSqlQuery(QSqlDatabase::database(name));
+    query.exec("CREATE TABLE IF NOT EXISTS historyTranslate (fromL varchar(2),fromT varchar(2),toL varchar(255), toT varchar(255))");
 }
 
 void Database::insertRow(ElementHistory element)
