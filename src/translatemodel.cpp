@@ -8,16 +8,10 @@ TranslateModel::TranslateModel(QObject *parent) : QObject(parent)
     sourceText="Hello,World!";
     langFrom="en";
     langTo="ru";
-}
-
-QString TranslateModel::getLangFrom() const
-{
-    return langFrom;
-}
-
-QString TranslateModel::getLangTo() const
-{
-    return langTo;
+    combolist1<<"en"<<"ru"<<"fr"<<"de"<<"it";
+    combolist2<<"en"<<"ru"<<"fr"<<"de"<<"it";
+    cbCount1=0;
+    cbCount2=1;
 }
 
 QString TranslateModel::getSourceText() const
@@ -28,18 +22,6 @@ QString TranslateModel::getSourceText() const
 QString TranslateModel::getTranslatedText() const
 {
     return translatedText;
-}
-
-void TranslateModel::setLangFrom(QString _langFrom)
-{
-    langFrom=_langFrom;
-    emit langFromChanged();
-}
-
-void TranslateModel::setLangTo(QString _langTo)
-{
-    langTo=_langTo;
-    emit langToChanged();
 }
 
 void TranslateModel::setSourceText(QString _sourceText)
@@ -55,23 +37,49 @@ void TranslateModel::setTranslatedText(QString _translatedText)
     emit translatedTextChanged();
 }
 
+QStringList TranslateModel::getCombolist1() const
+{
+    return combolist1;
+}
+
+QStringList TranslateModel::getCombolist2() const
+{
+    return combolist2;
+}
+
+int TranslateModel::getCbCount1() const
+{
+    return cbCount1;
+}
+
+int TranslateModel::getCbCount2() const
+{
+    return cbCount2;
+}
+
+void TranslateModel::setCbCount1(int _cbCount1)
+{
+    if(cbCount1==_cbCount1) return;
+    cbCount1=_cbCount1;
+    langFrom=combolist1.at(_cbCount1);
+}
+
+void TranslateModel::setCbCount2(int _cbCount2)
+{
+    if(cbCount2==_cbCount2) return;
+    cbCount2=_cbCount2;
+    langTo=combolist1.at(_cbCount2);
+}
+
 void TranslateModel::translate()
 {
     serviceHTTP->sendRequest(langFrom,langTo,sourceText);
-}
-
-void TranslateModel::swap()
-{
-    QString temp=langFrom;
-    setLangFrom(langTo);
-    setLangTo(temp);
 }
 
 void TranslateModel::getResponse(QString response)
 {
     if(response.isEmpty()) return;
     setTranslatedText(response);
-    qDebug()<<translatedText;
     serviceHistory->insertRow(langFrom,langTo,sourceText,translatedText);
     emit translatedTextChanged();
 }

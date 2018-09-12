@@ -9,7 +9,6 @@ Page {
     TransalteModel{
         id: transalte
     }
-
     SilicaFlickable {
         anchors.fill: parent
         PullDownMenu {
@@ -24,25 +23,32 @@ Page {
                 leftMargin: Theme.horizontalPageMargin
                 rightMargin: Theme.horizontalPageMargin
             }
-            Row{
-                Text{
-                    text:transalte.langFrom
-                    font.family: "Helvetica"
-                    color:"blue"
-                    font.pointSize: 48
+            ComboBox{
+                label:"From"
+                menu: ContextMenu{
+                    Repeater{
+                        model:transalte.combolist1
+                        delegate: MenuItem{
+                            text: transalte.combolist1[index]
+                        }
+                    }
                 }
-                Text{
-                    text:transalte.langTo
-                    color:"green"
-                    font.family: "Helvetica"
-                    font.pointSize: 48
+                currentIndex: transalte.cbCount1
+                onCurrentIndexChanged: transalte.cbCount1=currentIndex;
+            }
+            ComboBox{
+                label:"To"
+                menu: ContextMenu{
+                    Repeater{
+                        model:transalte.combolist2
+                        delegate: MenuItem{
+                            text: transalte.combolist2[index]
+                        }
+                    }
                 }
+                currentIndex: transalte.cbCount2
+                onCurrentIndexChanged: transalte.cbCount2=currentIndex
             }
-            Button{
-                text: "swap"
-                onClicked: transalte.swap()
-            }
-
             TextField{
                 text:transalte.sourceText
                 onTextChanged:transalte.sourceText=text;
