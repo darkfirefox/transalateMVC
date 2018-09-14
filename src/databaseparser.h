@@ -9,6 +9,7 @@ public:
     DatabaseParser();
     ElementHistory fromRecord(const QSqlRecord &rec);
     ElementHistory fromStrings(QString langFrom,QString langTo,QString textFrom,QString textTo);
+    ElementHistory fromStringList(QStringList list);
 };
 
 #endif // DATABASEPARSER_H

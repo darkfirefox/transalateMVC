@@ -1,4 +1,5 @@
 #include "databaseparser.h"
+#include <QDebug>
 
 DatabaseParser::DatabaseParser()
 {
@@ -23,6 +24,17 @@ ElementHistory DatabaseParser::fromStrings(QString langFrom, QString langTo, QSt
     element.setLangT(langTo);
     element.setTextF(textFrom);
     element.setTextT(textTo);
+    return element;
+}
+
+ElementHistory DatabaseParser::fromStringList(QStringList list)
+{
+    if(list.size()<4) return ElementHistory();
+    ElementHistory element;
+    element.setLangF(list.at(0));
+    element.setLangT(list.at(1));
+    element.setTextF(list.at(2));
+    element.setTextT(list.at(3));
     return element;
 }
 

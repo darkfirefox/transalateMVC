@@ -6,6 +6,8 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonArray>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 class RequestConverter
 {
 public:

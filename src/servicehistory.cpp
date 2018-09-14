@@ -3,9 +3,11 @@ ServiceHistory* ServiceHistory::service=0;
 ServiceHistoryDestroyer ServiceHistory::destroyer;
 
 
-ServiceHistory::ServiceHistory()
+ServiceHistory::ServiceHistory(QObject *parent) : QObject(parent)
 {
     db.init();
+    stream=&StreamData::Instance();
+    connect(stream,SIGNAL(readyToStore()),this,SLOT(storeDataFromStream()));
 }
 
 void ServiceHistory::deleteAll()
@@ -26,6 +28,7 @@ void ServiceHistory::insertRow(QString langFrom,QString langTo,QString textFrom,
 ListElementhistory ServiceHistory::readAll()
 {
     ListRecords recs = db.readAll();
+    qDebug()<<"readed all";
     ListElementhistory list;
     for(int i=0;i<recs.size();i++){
         list.add(parser.fromRecord(recs.getAt(i)));
@@ -40,6 +43,12 @@ ServiceHistory &ServiceHistory::Instance()
         destroyer.init(service);
     }
     return *service;
+}
+
+void ServiceHistory::storeDataFromStream()
+{
+    qDebug()<<"store";
+    db.insertRow(parser.fromStringList(stream->readAll()));
 }
 
 ServiceHistoryDestroyer::~ServiceHistoryDestroyer()

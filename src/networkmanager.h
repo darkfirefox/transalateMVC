@@ -6,7 +6,6 @@
 #include <QNetworkRequest>
 #include <QObject>
 
-
 class NetworkManager: public QObject
 {
     Q_OBJECT

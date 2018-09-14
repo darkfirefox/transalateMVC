@@ -1,7 +1,6 @@
 #ifndef LISTELEMENTHISTORY_H
 #define LISTELEMENTHISTORY_H
 #include <QVector>
-
 #include "elementhistory.h"
 class ListElementhistory
 {

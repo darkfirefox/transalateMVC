@@ -24,9 +24,10 @@ SOURCES += src/translateMVC.cpp \
     src/elementhistory.cpp \
     src/servicehttp.cpp \
     src/networkmanager.cpp \
-    src/elementrequest.cpp \
     src/requestconverter.cpp \
-    src/translatemodel.cpp
+    src/translatemodel.cpp \
+    src/streamdata.cpp \
+    src/services.cpp
 
 DISTFILES += qml/translateMVC.qml \
     qml/cover/CoverPage.qml \
@@ -61,7 +62,10 @@ HEADERS += \
     src/elementhistory.h \
     src/servicehttp.h \
     src/networkmanager.h \
-    src/elementrequest.h \
     src/requestconverter.h \
-    src/translatemodel.h
+    src/translatemodel.h \
+    src/streamdata.h \
+    src/iservicehtttp.h \
+    src/iservicehistory.h \
+    src/services.h
 QT+=sql

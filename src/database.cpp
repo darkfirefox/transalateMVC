@@ -28,6 +28,7 @@ void Database::insertRow(ElementHistory element)
 
 void Database::deleteRow(const int id)
 {
+
     query.prepare("delete from historyTranslate where rowid = ?");
     query.addBindValue(id);
     query.exec();

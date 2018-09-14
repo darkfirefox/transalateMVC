@@ -5,8 +5,10 @@
 #include "listelementhistory.h"
 #include "listrecords.h"
 #include "databaseparser.h"
-
+#include "iservicehistory.h"
+#include "streamdata.h"
 class ServiceHistory;
+class StreamData;
 class ServiceHistoryDestroyer
 {
 public:
@@ -16,8 +18,9 @@ private:
     ServiceHistory* instance;
 };
 
-class ServiceHistory
+class ServiceHistory:public QObject,public IServiceHistory
 {
+    Q_OBJECT
 public:
     void deleteAll();
     void deleteRow(int id);
@@ -25,14 +28,17 @@ public:
     ListElementhistory readAll();
 
     static ServiceHistory& Instance();
+public slots:
+    void storeDataFromStream();
 private:
     Database db;
     DatabaseParser parser;
+    StreamData* stream;
 
     static ServiceHistory* service;
     static ServiceHistoryDestroyer destroyer;
 protected:
-    ServiceHistory();
+    explicit ServiceHistory(QObject *parent = nullptr);
     friend class ServiceHistoryDestroyer;
     ServiceHistory(const ServiceHistory&);
     ServiceHistory& operator= (ServiceHistory&);

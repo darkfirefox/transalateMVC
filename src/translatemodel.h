@@ -4,8 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include "servicehistory.h"
-#include "servicehttp.h"
+#include "services.h"
 
 class TranslateModel : public QObject
 {
@@ -17,6 +16,8 @@ class TranslateModel : public QObject
     Q_PROPERTY(QStringList combolist2 READ getCombolist2 NOTIFY combolist2Changed)
     Q_PROPERTY(int cbCount1 READ getCbCount1 WRITE setCbCount1 NOTIFY cbCount1Changed)
     Q_PROPERTY(int cbCount2 READ getCbCount2 WRITE setCbCount2 NOTIFY cbCount2Changed)
+
+    Q_PROPERTY(QString page READ getPage NOTIFY pageChanged)
 public:
     explicit TranslateModel(QObject *parent = nullptr);
 
@@ -35,8 +36,10 @@ public:
     void setCbCount1(int _cbCount1);
     void setCbCount2(int _cbCount2);
 
-    Q_INVOKABLE void translate();
+    QString getPage();
 
+    Q_INVOKABLE void translate();
+    Q_INVOKABLE void historyPage();
 signals:
     void translatedTextChanged();
     void langFromChanged();
@@ -46,6 +49,7 @@ signals:
     void combolist2Changed();
     void cbCount1Changed();
     void cbCount2Changed();
+    void pageChanged();
 public slots:
 private slots:
     void getResponse(QString response);
@@ -55,8 +59,9 @@ private:
     QString sourceText;
     QString translatedText;
 
-    ServiceHTTP* serviceHTTP;
-    ServiceHistory* serviceHistory;
+    QString page;
+    StreamData* stream;
+    Services services;
 
     QStringList combolist1;
     QStringList combolist2;

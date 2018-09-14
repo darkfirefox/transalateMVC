@@ -2,14 +2,15 @@
 #define HISTORYMODEL_H
 #include <QAbstractListModel>
 #include <QObject>
-#include "servicehistory.h"
 #include "listelementhistory.h"
+#include "services.h"
 
 class HistoryModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     enum HistoryRole{
+        id,
         langF,
         langT,
         textF,
@@ -25,7 +26,7 @@ public:
     Q_INVOKABLE void clearAll();
 private:
     ListElementhistory backing;
-    ServiceHistory* serviceHistory;
+    Services services;
 };
 
 #endif // HISTORYMODEL_H

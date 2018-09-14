@@ -6,8 +6,8 @@
 #include <QNetworkReply>
 #include "requestconverter.h"
 #include "networkmanager.h"
-#include "elementrequest.h"
-
+#include "iservicehtttp.h"
+#include "streamdata.h"
 class ServiceHTTP;
 class ServiceHTTPDestroyer
 {
@@ -19,21 +19,20 @@ private:
 };
 
 
-class ServiceHTTP : public QObject
+class ServiceHTTP : public QObject,public IServiceHttp
 {
     Q_OBJECT
 public:
     static ServiceHTTP& Instance();
 
     void sendRequest(QString langFrom,QString langTo, QString sourceText);
-    QString getResponse();
-
+signals:
+    void  addedAnswer();
 private slots:
     void receiveReply(QNetworkReply* reply);
-signals:
-    void  receiveResponse(QString _response);
 private:
     NetworkManager* network;
+    StreamData* stream;
     QString response;
     RequestConverter requestConverter;
 

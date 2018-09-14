@@ -2,8 +2,7 @@
 
 HistoryModel::HistoryModel(QObject *parent)
 {
-    serviceHistory=&ServiceHistory::Instance();
-    backing = serviceHistory->readAll();
+    backing = services.readAll();
 }
 
 int HistoryModel::rowCount(const QModelIndex &parent) const
@@ -17,6 +16,8 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     switch (role) {
+    case id:
+        return QVariant(backing.getAt(index.row()).getId());
     case langF:
         return QVariant(backing.getAt(index.row()).getLangF());
     case langT:
@@ -32,6 +33,7 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> HistoryModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles[id]="id";
     roles[langF] = "langF";
     roles[langT] = "langT";
     roles[textF] = "textF";
@@ -44,10 +46,11 @@ void HistoryModel::deleteRow(const int i)
     if(i < 0 || i >= backing.size()) {
         return;
     }
+    int id=backing.getAt(i).getId();
     beginRemoveRows(QModelIndex(), i, i);
     backing.deleteAt(i);
     endRemoveRows();
-    serviceHistory->deleteRow(i);
+    services.deleteRow(id);
 }
 
 void HistoryModel::clearAll()
@@ -57,5 +60,5 @@ void HistoryModel::clearAll()
              backing.deleteAt(i);
          }
     endRemoveRows();
-    serviceHistory->deleteAll();
+    services.deleteAll();
 }

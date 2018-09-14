@@ -6,7 +6,9 @@ ServiceHTTPDestroyer ServiceHTTP::destroyer;
 ServiceHTTP::ServiceHTTP(QObject *parent) : QObject(parent)
 {
     network=new NetworkManager();
+    stream=&StreamData::Instance();
     connect(network,SIGNAL(receivedResponse(QNetworkReply*)),this,SLOT(receiveReply(QNetworkReply*)));
+    connect(this,SIGNAL(addedAnswer()),stream,SLOT(lastWasTrasnalate()));
 }
 
 ServiceHTTP &ServiceHTTP::Instance()
@@ -21,17 +23,17 @@ ServiceHTTP &ServiceHTTP::Instance()
 void ServiceHTTP::sendRequest(QString langFrom, QString langTo, QString sourceText)
 {
     network->sendPostRequest(requestConverter.toString(langFrom,langTo,sourceText));
-}
-
-QString ServiceHTTP::getResponse()
-{
-    return response;
+    *stream<<langFrom<<langTo<<sourceText;
 }
 
 void ServiceHTTP::receiveReply(QNetworkReply *reply)
 {
-    response=requestConverter.translatedFromReply(reply);
-    emit receiveResponse(response);
+    QString response=requestConverter.translatedFromReply(reply);
+    if(response.isEmpty()) stream->clear();
+    else{
+            *stream<<response;
+            emit addedAnswer();
+    }
 }
 
 ServiceHTTPDestroyer::~ServiceHTTPDestroyer()

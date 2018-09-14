@@ -2,9 +2,8 @@
 
 TranslateModel::TranslateModel(QObject *parent) : QObject(parent)
 {
-    serviceHTTP=&ServiceHTTP::Instance();
-    serviceHistory=&ServiceHistory::Instance();
-    connect(serviceHTTP,SIGNAL(receiveResponse(QString)),this,SLOT(getResponse(QString)));
+    stream=&StreamData::Instance();
+    connect(stream,SIGNAL(responseReceived(QString)),this,SLOT(getResponse(QString)));
     sourceText="Hello,World!";
     langFrom="en";
     langTo="ru";
@@ -71,15 +70,25 @@ void TranslateModel::setCbCount2(int _cbCount2)
     langTo=combolist1.at(_cbCount2);
 }
 
+QString TranslateModel::getPage()
+{
+    return page;
+}
+
 void TranslateModel::translate()
 {
-    serviceHTTP->sendRequest(langFrom,langTo,sourceText);
+    services.transalate(langFrom,langTo,sourceText);
+}
+
+void TranslateModel::historyPage()
+{
+    page="HistoryPage.qml";
+    emit pageChanged();
 }
 
 void TranslateModel::getResponse(QString response)
 {
     if(response.isEmpty()) return;
-    setTranslatedText(response);
-    serviceHistory->insertRow(langFrom,langTo,sourceText,translatedText);
+    translatedText=response;
     emit translatedTextChanged();
 }

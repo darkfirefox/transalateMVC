@@ -8,13 +8,16 @@ Page {
 
     TransalteModel{
         id: transalte
+        onPageChanged: {
+            pageStack.push(Qt.resolvedUrl(transalte.page));
+        }
     }
     SilicaFlickable {
         anchors.fill: parent
         PullDownMenu {
             MenuItem {
                 text: qsTr("Show history")
-                onClicked: pageStack.push(Qt.resolvedUrl("HistoryPage.qml"))
+                onClicked: transalte.historyPage();
             }
         }
         Column{
